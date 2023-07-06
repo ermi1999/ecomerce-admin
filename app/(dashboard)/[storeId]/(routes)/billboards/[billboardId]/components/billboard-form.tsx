@@ -22,8 +22,6 @@ import { toast } from "react-hot-toast";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import { AlertModal } from "@/components/modals/alert-modal";
-import { ApiAlert } from "@/components/ui/api-alert";
-import { useOrigin } from "@/hooks/use-origin";
 import ImageUpload from "@/components/ui/image-upload";
 
 interface BillboardFormProps {
@@ -40,7 +38,6 @@ type BillboardFormValues = z.infer<typeof formSchema>;
 export const BillboardForm: React.FC<BillboardFormProps> = ({
   initialData,
 }) => {
-  const origin = useOrigin();
   const params = useParams();
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -74,6 +71,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
       }
 
       router.refresh();
+      router.push(`/${params.storeId}/billboards`);
       toast.success(toastMessage);
     } catch {
       toast.error("Something went wrong");
@@ -89,7 +87,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
         `/api/${params.storeId}/billboards/${params.billboardId}`
       );
       router.refresh();
-      router.push("/");
+      router.push(`/${params.storeId}/billboards`);
       toast.success("Billboard deleted.");
     } catch (error) {
       toast.error(
